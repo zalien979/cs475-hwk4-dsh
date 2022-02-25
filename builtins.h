@@ -9,7 +9,8 @@ typedef enum
 
 /**
  * Checks whether given command string is a builtin
- * @param cmd
- * @return positive code if true, CMD_EXT otherwise
+ * @param cmd	 A command string, such as "/bin/ls" or "exit"
+ * @return CMD_EXT if the given command string is an external commamd;
+ * Otherwise, return the build-in code (from the constants defined above)
  */
 cmd_t chkBuiltin(char *cmd);

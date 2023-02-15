@@ -6,6 +6,5 @@
  */
 
 #define MAXBUF 256
-#define HISTORY_LEN 100
 
 // TODO: Your function prototypes below

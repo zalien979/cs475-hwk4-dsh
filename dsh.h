@@ -8,4 +8,4 @@
 #define MAXBUF 256
 
 // TODO: Your function prototypes below
-void method1();
+void method1(int argc, char ** argv);

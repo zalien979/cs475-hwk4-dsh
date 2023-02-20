@@ -17,30 +17,58 @@
 #include <string.h>
 #define MAXBUF 256
 
-void method1(){
+
+void method1(int argc, char ** argv){
     //setup;
     pid_t pid=1;
-    char *args[]={NULL,NULL};
+    int num=5;
+    //more arguments are needed
+    if(argc>1){
+        sscanf(argv[1], "%d", &num);
+    }
     char *line = (char*) malloc(256);
     char *path = (char*) malloc(256);
     printf("welcome to zale's shell please enter a command\n");
     //main running loop
     while(pid!=0){
         strcpy(line, "");
+        char **array = (char**) malloc((num+1) * sizeof(char*));
+        // this loops through each array element and instantiates
+        // an array of chars of length:MAXBUF
+        for (int i = 0; i < num; i++) {
+            array[i] = (char*) malloc(MAXBUF * sizeof(char));
+        }
         fgets(line, 256, stdin); 
+        for (int k = 0; k < num; k++) {
+        strcpy(array[k], "");
+        }
 
         //trim
         int i=0;
+        int j=0;
         strcpy(path, "");
         while(strcmp(&line[i],"\0")!=0){
             if(line[i]!=' '){
                 if(line[i]!='\n'){
-                strncat(path, &line[i], 1);
+                strncat(array[j], &line[i], 1);
                 }
-           }
+            }
+            else{
+                j++;
+                if(j>num){
+                    printf("oops too many arguements\n if you would like to enter more than 5 please enter max arguments when starting the shell\n");
+                    
+                }
+            }
             i++;
         }
-
+        j++;
+        //null the rest of the array
+        while(j<num){
+            array[j]=(char*) 0;
+            j++;
+        }
+        strcpy(path, array[0]);
         //check if it is a predefined command
         if(strcmp(path, "exit")==0){
             break;
@@ -86,13 +114,14 @@ void method1(){
                     }
                 }
                 else{
-                    execv(path, args);
+                    execv(path, array);
                 }
             }
             else{
                 printf("no file found with name\n");
             }
         }
+
         //check if file exists
         else {
            char *temp = (char*) malloc(257); 
@@ -106,16 +135,20 @@ void method1(){
                     wait(NULL);
                 }
                 else{
-                    execv(line, args);
+                    execv(line, array);
     
                 }
             }
 
             else{
                 int r=0;
-                char * token = strtok(getenv("PATH"), ":");
+                //strtok is weird so i need to create a new copy here so $PATH isnt messed up
+                char * toker = getenv("PATH");
+                char * token = (char*) malloc(257); 
+                strcpy(token, toker);
+                token= strtok(token, ":");
                 while(token !=NULL){
-                    strcpy(path,token);
+                    strcpy(path, token);
                     strcat(path, temp);
                     if(access(path, F_OK | X_OK) == 0){
                         pid= fork();
@@ -125,7 +158,7 @@ void method1(){
                             break;
                         }
                         else{
-                            execv(path, args);
+                            execv(path, array);
                         }
                     }  
                     token = strtok(NULL, ":");
@@ -135,5 +168,6 @@ void method1(){
                 }
             }
         }
+        free(array);
     }
 }

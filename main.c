@@ -14,7 +14,7 @@
 
 int main(int argc, char **argv)
 {
-	method1();
+	method1(argc, argv);
 
 	return 0;
 }

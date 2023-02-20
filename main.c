@@ -1,8 +1,8 @@
 /*
  * main.c
  *
- *  Created on: Mar 17 2017
- *      Author: david
+ *  Created on: Feb 19 2023
+ *      Author: Zale Fadiman
  */
 
 #include <stdio.h>
@@ -14,7 +14,7 @@
 
 int main(int argc, char **argv)
 {
-	char cmdline[MAXBUF]; // stores user input from commmand line
+	method1();
 
 	return 0;
 }
